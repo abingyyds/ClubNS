@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web3.club - Domain Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Web3.club</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.html">Register Domain</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-domains.html">My Domains</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="explore-clubs.html">Explore Clubs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-clubs.html">User Center</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="zk-login.html">ZK Login</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item" id="connectWallet">
+                        <a class="nav-link btn btn-outline-light" href="#">Connect Wallet</a>
+                    </li>
+                    <li class="nav-item dropdown d-none" id="accountDropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="walletAddress" role="button" data-bs-toggle="dropdown">
+                            0x1234...5678
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="my-clubs.html">User Center</a></li>
+                            <li><a class="dropdown-item" href="admin.html">Admin Console</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="disconnectWallet">Disconnect</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero bg-primary text-white text-center py-5">
+        <div class="container">
+            <h1 class="display-4">Web3.club Domain Management System</h1>
+            <p class="lead">Register your unique .web3.club domain and own it permanently as an NFT</p>
+            <div class="search-box my-5">
+                <div class="input-group input-group-lg">
+                    <input type="text" class="form-control" id="domainSearch" placeholder="Enter your desired domain">
+                    <span class="input-group-text">.web3.club</span>
+                    <button class="btn btn-dark" type="button" id="searchButton">Search</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">Domain Registration</h3>
+                            <p class="card-text">Securely register your favorite domain through a two-step submission process to prevent sniping</p>
+                            <a href="register.html" class="btn btn-primary">Register Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">Domain Management</h3>
+                            <p class="card-text">View your domain list, set up DNS records, and manage auto-renewal</p>
+                            <a href="my-domains.html" class="btn btn-primary">Manage Domains</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title">NFT Display</h3>
+                            <p class="card-text">Each domain corresponds to a unique NFT that can be traded and showcases your digital assets</p>
+                            <a href="account.html" class="btn btn-primary">View NFTs</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-light py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Recently Registered Domains</h2>
+            <div class="row" id="recentDomains">
+                <!-- Dynamically load recently registered domains -->
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p>© 2023 Web3.club Domain Management System</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html> 

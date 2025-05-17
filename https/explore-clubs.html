@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Clubs - Web3.club</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Web3.club</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.html">Register Domain</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-domains.html">My Domains</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="explore-clubs.html">Explore Clubs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-clubs.html">User Center</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="zk-login.html">ZK Login</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item" id="connectWallet">
+                        <a class="nav-link btn btn-outline-light" href="#">Connect Wallet</a>
+                    </li>
+                    <li class="nav-item dropdown d-none" id="accountDropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="walletAddress" role="button" data-bs-toggle="dropdown">
+                            0x1234...5678
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="my-clubs.html">User Center</a></li>
+                            <li><a class="dropdown-item" href="admin.html">Admin Console</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="disconnectWallet">Disconnect</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <h1 class="mb-4">Explore Clubs</h1>
+        
+        <!-- Search and Filter -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="searchClub" placeholder="Search clubs...">
+                            <button class="btn btn-primary" type="button" id="searchButton">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="filterType">
+                            <option value="all" selected>All Clubs</option>
+                            <option value="memberCount">By Member Count</option>
+                            <option value="newest">Newest</option>
+                            <option value="popular">Most Popular</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="membershipType">
+                            <option value="all" selected>All Member Types</option>
+                            <option value="permanent">Permanent Members</option>
+                            <option value="temporary">Temporary Members</option>
+                            <option value="token">Token Members</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Club List -->
+        <div class="row" id="clubsList">
+            <!-- Club cards will be dynamically loaded via JavaScript -->
+        </div>
+        
+        <div id="noClubsFound" class="text-center py-5 d-none">
+            <i class="bi bi-search text-muted display-1"></i>
+            <h4 class="mt-3">No clubs found matching your criteria</h4>
+            <p class="text-muted">Try adjusting your search filters or view all clubs</p>
+            <button class="btn btn-primary mt-2" id="resetFiltersBtn">Reset Filters</button>
+        </div>
+        
+        <!-- Load More Button -->
+        <div class="text-center mt-4" id="loadMoreContainer">
+            <button class="btn btn-outline-primary" id="loadMoreBtn">Load More</button>
+        </div>
+    </div>
+    
+    <!-- Club Details Modal -->
+    <div class="modal fade" id="clubDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background-size: cover; background-position: center; height: 150px;" id="clubBannerContainer">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex align-items-end mb-4" style="margin-top: -50px;">
+                        <img src="" alt="Club Logo" id="clubLogo" class="rounded-circle border border-3 border-white bg-white" width="100" height="100">
+                        <div class="ms-3">
+                            <h3 id="clubName">Club Name</h3>
+                            <p class="text-muted mb-0" id="clubDomain">example.web3.club</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5>About Club</h5>
+                        <p id="clubDescription">Club description will be displayed here...</p>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title">Member Count</h6>
+                                    <p class="card-text display-6" id="clubMemberCount">120</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title">Created On</h6>
+                                    <p class="card-text" id="clubCreationDate">2023-05-15</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title">Admin</h6>
+                                    <p class="card-text text-truncate" id="clubAdmin">0x1234...5678</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Permanent Membership</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text" id="permanentMembershipPrice">Price: 0.05 ETH</p>
+                                    <button class="btn btn-primary w-100" id="buyPermanentBtn">Buy Permanent Membership</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Temporary Membership</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled">
+                                        <li>Monthly: <span id="monthlyPrice">0.01 ETH</span></li>
+                                        <li>Quarterly: <span id="quarterlyPrice">0.025 ETH</span></li>
+                                        <li>Yearly: <span id="yearlyPrice">0.08 ETH</span></li>
+                                    </ul>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-primary" id="buyMonthlyBtn">Monthly</button>
+                                        <button class="btn btn-outline-primary" id="buyQuarterlyBtn">Quarterly</button>
+                                        <button class="btn btn-outline-primary" id="buyYearlyBtn">Yearly</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3" id="tokenGateContainer">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Token Membership Requirements</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted mb-3">Meet <strong>any</strong> of the following conditions to become a member:</p>
+                            
+                            <div class="list-group mb-3" id="tokenRequirementsList">
+                                <!-- Token requirements will be dynamically loaded -->
+                            </div>
+                            
+                            <button class="btn btn-primary" id="checkTokenAccessBtn">Check My Membership Eligibility</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Purchase Confirmation Modal -->
+    <div class="modal fade" id="purchaseConfirmModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Membership Purchase</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>You are about to purchase membership for <strong id="confirmClubName">Club Name</strong></p>
+                    
+                    <div class="alert alert-primary">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <i class="bi bi-info-circle-fill fs-3"></i>
+                            </div>
+                            <div>
+                                <strong>Membership Type: <span id="confirmMembershipType">Permanent</span></strong>
+                                <p class="mb-0 mt-1">Payment Amount: <span id="confirmPrice">0.05 ETH</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="mb-0 mt-3">After confirmation, a transaction will be initiated through your wallet.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmPurchaseBtn">Confirm Purchase</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>© 2023 Web3.club Domain Management System</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/explore-clubs.js"></script>
+</body>
+</html> 

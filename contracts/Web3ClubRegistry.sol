@@ -38,6 +38,12 @@ contract Web3ClubRegistry is Ownable, ReentrancyGuard {
     // User deposit balance
     mapping(address => uint256) public userDeposits;
     
+    // Total of all user deposits
+    uint256 public totalUserDeposits;
+    
+    // Total of all auto-renewal funds
+    uint256 public totalAutoRenewalFunds;
+    
     // User domain commitment information
     mapping(bytes32 => CommitmentInfo) public commitments;
     
@@ -181,6 +187,7 @@ contract Web3ClubRegistry is Ownable, ReentrancyGuard {
         uint256 excessAmount = msg.value - depositAmount;
         if (excessAmount > 0) {
             userDeposits[msg.sender] += excessAmount;
+            totalUserDeposits += excessAmount;
         }
         
         emit NameCommitted(commitment, msg.sender, depositAmount);
@@ -315,6 +322,7 @@ contract Web3ClubRegistry is Ownable, ReentrancyGuard {
         
         // Add funds to auto-renewal balance
         autoRenewalFunds[name] += msg.value;
+        totalAutoRenewalFunds += msg.value;
         
         emit AutoRenewalFunded(name, msg.sender, msg.value);
     }
@@ -393,6 +401,7 @@ contract Web3ClubRegistry is Ownable, ReentrancyGuard {
         
         // Deduct fees from auto-renewal funds
         autoRenewalFunds[name] -= totalFee;
+        totalAutoRenewalFunds -= totalFee;
         
         // Calculate new expiration time
         uint256 newExpiryTime;
@@ -421,6 +430,7 @@ contract Web3ClubRegistry is Ownable, ReentrancyGuard {
     function deposit() external payable {
         require(msg.value > 0, "Must send some ETH");
         userDeposits[msg.sender] += msg.value;
+        totalUserDeposits += msg.value;
         emit DepositReceived(msg.sender, msg.value);
     }
     
@@ -433,6 +443,7 @@ contract Web3ClubRegistry is Ownable, ReentrancyGuard {
         require(userDeposits[msg.sender] >= amount, "Insufficient deposit");
         
         userDeposits[msg.sender] -= amount;
+        totalUserDeposits -= amount;
         
         // Transfer
         (bool success, ) = msg.sender.call{value: amount}("");
@@ -448,15 +459,11 @@ contract Web3ClubRegistry is Ownable, ReentrancyGuard {
         uint256 balance = address(this).balance;
         require(balance > 0, "No balance to withdraw");
         
-        // Deduct user deposits and auto-renewal funds
-        uint256 totalUserDeposits = 0;
-        address[] memory users = new address[](0); // Actual application should implement user tracking
-        for (uint256 i = 0; i < users.length; i++) {
-            totalUserDeposits += userDeposits[users[i]];
-        }
+        // Calculate total funds that belong to users
+        uint256 reservedFunds = totalUserDeposits + totalAutoRenewalFunds;
         
-        // Withdrawable amount = Total balance - User deposits - Auto-renewal funds (Simplified calculation)
-        uint256 withdrawableAmount = balance - totalUserDeposits;
+        // Withdrawable amount = Total balance - Reserved funds
+        uint256 withdrawableAmount = balance > reservedFunds ? balance - reservedFunds : 0;
         require(withdrawableAmount > 0, "No withdrawable amount");
         
         // Transfer
@@ -470,6 +477,7 @@ contract Web3ClubRegistry is Ownable, ReentrancyGuard {
     receive() external payable {
         // Default, count received ETH as deposit
         userDeposits[msg.sender] += msg.value;
+        totalUserDeposits += msg.value;
         emit DepositReceived(msg.sender, msg.value);
     }
 } 
