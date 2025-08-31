@@ -63,44 +63,46 @@ contract Web3ClubNFT is ERC721URIStorage, Ownable {
      * @return tokenId ID of the newly minted NFT
      */
     function mint(address to, string memory domainName, uint256 expiryTime) external onlyRegistry returns (uint256) {
-        _tokenIds.increment();
-        uint256 tokenId = _tokenIds.current();
-        
-        _mint(to, tokenId);
-        
-        // Store domain information
-        _domainNames[tokenId] = domainName;
-        _domainIds[domainName] = tokenId;
-        
-        // Record domain registration information
-        _domainInfo[tokenId] = DomainInfo({
-            registrationTime: block.timestamp,
-            expiryTime: expiryTime,
-            registrant: to
-        });
-        
-        // Set tokenURI using Base64 encoding and data URI
-        string memory fullDomainName = string(abi.encodePacked(domainName, ".web3.club"));
-        
-        // Build JSON metadata
-        string memory json = string(
-            abi.encodePacked(
-                '{"name":"', 
-                fullDomainName,
-                '", "description":"Web3Club Domain NFT", "image":"https://web3.club/nft/image/', 
-                domainName, 
-                '.png"}'
-            )
-        );
-        
-        // Base64 encode and add data URI prefix
-        string memory encodedJson = Base64.encode(bytes(json));
-        string memory tokenUri = string(abi.encodePacked("data:application/json;base64,", encodedJson));
-        
-        _setTokenURI(tokenId, tokenUri);
-        
-        return tokenId;
-    }
+    _tokenIds.increment();
+    uint256 tokenId = _tokenIds.current();
+    
+    _mint(to, tokenId);
+    
+    // 
+    _domainNames[tokenId] = domainName;
+    _domainIds[domainName] = tokenId;
+    
+    // 
+    _domainInfo[tokenId] = DomainInfo({
+        registrationTime: block.timestamp,
+        expiryTime: expiryTime,
+        registrant: to
+    });
+    
+    // “.web3.club”
+    string memory fullDomainName = string(abi.encodePacked(domainName, ".web3.club"));
+    
+    // JSON
+    string memory json = string(
+        abi.encodePacked(
+            '{"name":"', 
+            fullDomainName,
+            '", "description":"Web3Club Domain NFT", "image":"https://web3.club/nft/image/', 
+            domainName, 
+            '.png"}'
+        )
+    );
+    
+    // Base64编码并添加data URI前缀
+    string memory encodedJson = Base64.encode(bytes(json));
+    string memory tokenUri = string(abi.encodePacked("data:application/json;base64,", encodedJson));
+    
+    // Token URI
+    _setTokenURI(tokenId, tokenUri);
+    
+    return tokenId;
+}
+
     
     /**
      * @dev Update domain expiration time
